@@ -1,12 +1,11 @@
 import { useState } from 'react';
 import './App.css';
 import reactLogo from './assets/react.svg';
-import { useTodo } from './domain/todo/hooks/useTodo';
+import TodoList from './domain/todo/ui/TodoList';
 import viteLogo from '/vite.svg';
 
 function App() {
   const [count, setCount] = useState(0);
-  const { availableTodos, deletedTodos, addTodo, removeTodo } = useTodo();
 
   return (
     <>
@@ -19,21 +18,7 @@ function App() {
         </a>
       </div>
       <h1>Vite + React</h1>
-      <button onClick={() => addTodo('hello')}>Add Todo</button>
-      <ul>
-        {availableTodos.map((todo) => (
-          <li key={todo.id}>
-            {todo.message}
-            <button onClick={() => removeTodo(todo.id)}>Remove</button>
-          </li>
-        ))}
-      </ul>
-      <h2>Deleted Todos</h2>
-      <ul>
-        {deletedTodos.map((todo) => (
-          <li key={todo.id}>{todo.message}</li>
-        ))}
-      </ul>
+      <TodoList />
 
       <div className='card'>
         <button onClick={() => setCount((count) => count + 1)}>
