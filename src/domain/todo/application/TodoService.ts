@@ -30,6 +30,8 @@ export class TodoService implements ITodoService {
   }
 }
 
+export const spySaveTodo = vi.spyOn(TodoService.prototype, 'saveTodo');
+
 export function makeTodoService(): ITodoService {
   return new TodoService(new TodoRepository());
 }
