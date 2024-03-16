@@ -1,5 +1,5 @@
 import { v4 } from 'uuid';
-import { TodoVo } from './todo_vo';
+import { TodoVo } from './TodoVo';
 
 export type TodoId = string;
 export type TodoDate = number;
