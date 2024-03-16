@@ -2,15 +2,19 @@ import { ITodoEntity, createTodoEntity } from '../../entities/todo_entity';
 import { TodoVo } from '../../entities/todo_vo';
 import {
   CreateTodoDto,
+  CreateTodoDtoSchema,
   ITodoRepository,
   UpdateTodoDto,
-} from './todo_repository.type';
+  UpdateTodoDtoSchema,
+} from './ITodoRepository';
 
 export class TodoRepository implements ITodoRepository {
   async create(todo: CreateTodoDto): Promise<ITodoEntity> {
+    const parsedTodo = CreateTodoDtoSchema.parse(todo);
+
     const todoInstance = createTodoEntity({
-      message: todo.message,
-      priority: todo.priority,
+      message: parsedTodo.message,
+      priority: parsedTodo.priority,
       completed: false,
       createdAt: Date.now(),
       updatedAt: null,
@@ -25,7 +29,8 @@ export class TodoRepository implements ITodoRepository {
     return todoInstance;
   }
   update(id: string, todo: UpdateTodoDto): Promise<ITodoEntity> {
-    console.log(id, todo);
+    const parsedTodo = UpdateTodoDtoSchema.parse(todo);
+    console.log(id, parsedTodo);
     throw new Error('Method not implemented.');
   }
   delete(id: string): Promise<void> {
