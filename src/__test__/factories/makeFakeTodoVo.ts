@@ -1,5 +1,5 @@
-import { TodoPriority } from '../../domain/todo/infra/entities/todo_entity';
-import { TodoVo } from '../../domain/todo/infra/entities/todo_vo';
+import { TodoPriority } from '../../domain/todo/infra/entities/TodoEntity';
+import { TodoVo } from '../../domain/todo/infra/entities/TodoVo';
 
 export function makeFakeTodoVo(properties?: Partial<TodoVo>): TodoVo {
   return {
