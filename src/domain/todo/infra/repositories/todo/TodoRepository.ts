@@ -1,3 +1,4 @@
+import { v4 } from 'uuid';
 import { ITodoEntity, createTodoEntity } from '../../entities/TodoEntity';
 import { TodoVo } from '../../entities/TodoVo';
 import {
@@ -13,6 +14,7 @@ export class TodoRepository implements ITodoRepository {
     const parsedTodo = CreateTodoDtoSchema.parse(todo);
 
     const todoInstance = createTodoEntity({
+      id: v4(),
       message: parsedTodo.message,
       priority: parsedTodo.priority,
       completed: false,
@@ -28,29 +30,48 @@ export class TodoRepository implements ITodoRepository {
     localStorage.setItem('b_f_todos', JSON.stringify(todos));
     return todoInstance;
   }
-  update(id: string, todo: UpdateTodoDto): Promise<ITodoEntity> {
+
+  async update(id: string, todo: UpdateTodoDto): Promise<ITodoEntity> {
     const parsedTodo = UpdateTodoDtoSchema.parse(todo);
-    console.log(id, parsedTodo);
+    const todoToUpdate = await this.findById(id);
+    if (!todoToUpdate) throw new Error('Todo not found');
+
+    const updatedTodo = createTodoEntity({
+      ...todoToUpdate,
+      ...parsedTodo,
+      updatedAt: Date.now(),
+    });
+
+    const todos = await this.findAll();
+    const todoIndex = todos.findIndex((todo) => todo.id === id);
+    todos[todoIndex] = updatedTodo;
+
+    localStorage.setItem('b_f_todos', JSON.stringify(todos));
+
+    return todoToUpdate;
+  }
+
+  async delete(_id: string): Promise<void> {
     throw new Error('Method not implemented.');
   }
-  delete(id: string): Promise<void> {
-    console.log(id);
-    throw new Error('Method not implemented.');
+
+  async findById(id: string): Promise<ITodoEntity> {
+    const todos = await this.findAll();
+    if (!todos) throw new Error('Todo not found');
+    const todo = todos.find((todo) => todo.id === id);
+    if (!todo) throw new Error('Todo not found');
+
+    return todo;
   }
-  findById(id: string): Promise<ITodoEntity> {
-    console.log(id);
-    throw new Error('Method not implemented.');
-  }
-  findAll(): Promise<ITodoEntity[]> {
+
+  async findAll(): Promise<ITodoEntity[]> {
     const todos = localStorage.getItem('b_f_todos');
-    if (!todos) return Promise.resolve([]);
+    if (!todos) return [];
 
     const parsedTodos = JSON.parse(todos) as TodoVo[];
-    return Promise.resolve(
-      parsedTodos.map((todo) => {
-        return createTodoEntity(todo);
-      })
-    );
+    return parsedTodos.map((todo) => {
+      return createTodoEntity(todo);
+    });
   }
 }
 
