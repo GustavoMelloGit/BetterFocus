@@ -1,5 +1,5 @@
-import { ITodoEntity, createTodoEntity } from '../../entities/todo_entity';
-import { TodoVo } from '../../entities/todo_vo';
+import { ITodoEntity, createTodoEntity } from '../../entities/TodoEntity';
+import { TodoVo } from '../../entities/TodoVo';
 import {
   CreateTodoDto,
   CreateTodoDtoSchema,

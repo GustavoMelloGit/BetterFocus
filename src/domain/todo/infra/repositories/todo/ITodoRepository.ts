@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { ITodoEntity, TodoPriority } from '../../entities/todo_entity';
+import { ITodoEntity, TodoPriority } from '../../entities/TodoEntity';
 
 export interface ITodoRepository {
   create: (todo: CreateTodoDto) => Promise<ITodoEntity>;
