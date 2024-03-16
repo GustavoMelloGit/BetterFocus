@@ -1,18 +1,15 @@
-import { todoEntityToVo } from '../infra/entities/todo_entity';
-import { TodoVo } from '../infra/entities/todo_vo';
-import { TodoRepository } from '../infra/repositories/todo_repository/todo_repository';
-import { ITodoRepository } from '../infra/repositories/todo_repository/todo_repository.type';
+import { todoEntityToVo } from '../infra/entities/TodoEntity';
+import { TodoVo } from '../infra/entities/TodoVo';
+import { ITodoRepository } from '../infra/repositories/todo/ITodoRepository';
+import { TodoRepository } from '../infra/repositories/todo/TodoRepository';
 import { ITodoService } from './ITodoService';
 
 export class TodoService implements ITodoService {
   constructor(private readonly todoRepository: ITodoRepository) {}
 
-  async getAvailableTodos(): Promise<TodoVo[]> {
-    throw new Error('Method not implemented.');
-  }
-
-  async getDeletedTodos(): Promise<TodoVo[]> {
-    throw new Error('Method not implemented.');
+  async completeTodo(id: string): Promise<TodoVo> {
+    const todo = await this.todoRepository.update(id, { completed: true });
+    return todoEntityToVo(todo);
   }
 
   async saveTodo(dto: Pick<TodoVo, 'priority' | 'message'>): Promise<TodoVo> {
@@ -20,7 +17,7 @@ export class TodoService implements ITodoService {
     return todoEntityToVo(todo);
   }
 
-  async removeTodo(id: string): Promise<void> {
+  async removeTodo(_id: string): Promise<void> {
     throw new Error('Method not implemented.');
   }
 
@@ -29,8 +26,6 @@ export class TodoService implements ITodoService {
     return todos.map(todoEntityToVo);
   }
 }
-
-export const spySaveTodo = vi.spyOn(TodoService.prototype, 'saveTodo');
 
 export function makeTodoService(): ITodoService {
   return new TodoService(new TodoRepository());
