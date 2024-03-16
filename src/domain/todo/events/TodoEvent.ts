@@ -1,12 +1,12 @@
 import { createEmitter } from '../../../utils/createEmitter';
-import { Todo } from '../infra/entities/todo_entity';
+import { TodoVo } from '../infra/entities/TodoVo';
 
 const TodoEvent = createEmitter<{
-  todoAdded: Todo;
-  todoUpdated: Todo;
-  todoRemoved: Todo;
-  todoChecked: Todo;
-  todoUnchecked: Todo;
+  todoAdded: TodoVo;
+  todoUpdated: TodoVo;
+  todoRemoved: TodoVo;
+  todoChecked: TodoVo;
+  todoUnchecked: TodoVo;
 }>();
 
 export { TodoEvent };
