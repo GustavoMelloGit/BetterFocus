@@ -1,4 +1,3 @@
-import { v4 } from 'uuid';
 import { TodoVo } from './TodoVo';
 
 export type TodoId = string;
@@ -35,6 +34,7 @@ export class TodoEntity implements ITodoEntity {
   deletedAt: TodoDate | null;
 
   constructor(
+    id: TodoId,
     message: string,
     completed: boolean,
     priority: TodoPriority,
@@ -43,7 +43,7 @@ export class TodoEntity implements ITodoEntity {
     updatedAt: TodoDate | null = null,
     deletedAt: TodoDate | null = null
   ) {
-    this.id = v4();
+    this.id = id;
     this.message = message;
     this.completed = completed;
     this.priority = priority;
@@ -62,19 +62,9 @@ export class TodoEntity implements ITodoEntity {
   }
 }
 
-export function createTodoEntity(
-  todo: Pick<
-    TodoVo,
-    | 'completed'
-    | 'priority'
-    | 'message'
-    | 'completedAt'
-    | 'createdAt'
-    | 'updatedAt'
-    | 'deletedAt'
-  >
-): ITodoEntity {
+export function createTodoEntity(todo: TodoVo): ITodoEntity {
   return new TodoEntity(
+    todo.id,
     todo.message,
     todo.completed,
     todo.priority,
