@@ -2,7 +2,7 @@ import { component$, Slot } from '@builder.io/qwik';
 
 export default component$(() => {
   return (
-    <main>
+    <main class='min-h-svh flex flex-col'>
       <Slot />
     </main>
   );
