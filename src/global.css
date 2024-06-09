@@ -30,3 +30,11 @@ body {
   margin: 0;
   line-height: inherit;
 }
+
+@layer utilities {
+  .center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
