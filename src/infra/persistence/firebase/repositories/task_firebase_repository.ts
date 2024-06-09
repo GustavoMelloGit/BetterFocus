@@ -2,8 +2,10 @@ import {
   collection,
   deleteDoc,
   doc,
+  getDoc,
   getDocs,
   setDoc,
+  updateDoc,
 } from 'firebase/firestore';
 import { Task } from '~/domain/entities/task';
 import type { TaskRepository } from '~/domain/repositories/task';
@@ -11,8 +13,11 @@ import type { SaveTask, UpdateTask } from '~/domain/repositories/task.types';
 import { db } from '../init';
 
 export class TaskFirebaseRepository implements TaskRepository {
+  private readonly collectionName = 'tasks';
+  private readonly database = db;
+
   async getAll(): Promise<Task[]> {
-    const tasksCol = collection(db, 'tasks');
+    const tasksCol = collection(this.database, this.collectionName);
     const taskSnapshot = await getDocs(tasksCol);
     const taskList = taskSnapshot.docs.map((doc) => doc.data());
     const tasks: Task[] = taskList.map((task) => {
@@ -25,8 +30,19 @@ export class TaskFirebaseRepository implements TaskRepository {
     return tasks;
   }
 
-  getById(id: string): Promise<Task | null> {
-    throw new Error('Method not implemented.');
+  async getById(id: string): Promise<Task | null> {
+    const docRef = doc(this.database, this.collectionName, id);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      const task = new Task({
+        completed: data.completed,
+        title: data.title,
+        id: data.id,
+      });
+      return task;
+    }
+    throw new Error('Document not found');
   }
 
   async save(task: SaveTask): Promise<void> {
@@ -34,7 +50,11 @@ export class TaskFirebaseRepository implements TaskRepository {
       completed: false,
       title: task.title,
     });
-    const taskRef = doc(db, 'tasks', createdTask.props.id);
+    const taskRef = doc(
+      this.database,
+      this.collectionName,
+      createdTask.props.id
+    );
     await setDoc(taskRef, {
       id: createdTask.props.id,
       title: createdTask.props.title,
@@ -43,10 +63,10 @@ export class TaskFirebaseRepository implements TaskRepository {
   }
 
   async delete(id: string): Promise<void> {
-    await deleteDoc(doc(db, 'tasks', id));
+    await deleteDoc(doc(this.database, this.collectionName, id));
   }
 
-  update(id: string, task: UpdateTask): Promise<void> {
-    throw new Error('Method not implemented.');
+  async update(id: string, task: UpdateTask): Promise<void> {
+    await updateDoc(doc(this.database, this.collectionName, id), task);
   }
 }
