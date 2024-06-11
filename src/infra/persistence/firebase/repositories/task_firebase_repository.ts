@@ -1,3 +1,4 @@
+import { randomBytes } from 'crypto';
 import {
   collection,
   deleteDoc,
@@ -7,7 +8,7 @@ import {
   setDoc,
   updateDoc,
 } from 'firebase/firestore';
-import { Task } from '~/domain/entities/task';
+import type { Task } from '~/domain/entities/task';
 import type { TaskRepository } from '~/domain/repositories/task';
 import type { SaveTask, UpdateTask } from '~/domain/repositories/task.types';
 import { db } from '../init';
@@ -21,11 +22,11 @@ export class TaskFirebaseRepository implements TaskRepository {
     const taskSnapshot = await getDocs(tasksCol);
     const taskList = taskSnapshot.docs.map((doc) => doc.data());
     const tasks: Task[] = taskList.map((task) => {
-      return new Task({
+      return {
         id: task.id,
         title: task.title,
         completed: task.completed,
-      });
+      };
     });
     return tasks;
   }
@@ -35,30 +36,27 @@ export class TaskFirebaseRepository implements TaskRepository {
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
       const data = docSnap.data();
-      const task = new Task({
+      const task = {
         completed: data.completed,
         title: data.title,
         id: data.id,
-      });
+      };
       return task;
     }
     throw new Error('Document not found');
   }
 
   async save(task: SaveTask): Promise<void> {
-    const createdTask = new Task({
+    const createdTask: Task = {
       completed: false,
       title: task.title,
-    });
-    const taskRef = doc(
-      this.database,
-      this.collectionName,
-      createdTask.props.id
-    );
+      id: randomBytes(16).toString('hex'),
+    };
+    const taskRef = doc(this.database, this.collectionName, createdTask.id);
     await setDoc(taskRef, {
-      id: createdTask.props.id,
-      title: createdTask.props.title,
-      completed: createdTask.props.completed,
+      id: createdTask.id,
+      title: createdTask.title,
+      completed: createdTask.completed,
     });
   }
 

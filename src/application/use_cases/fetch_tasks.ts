@@ -18,6 +18,6 @@ export class FetchTasksUseCase implements IFetchTasksUseCase {
 
   public async execute(): Promise<FetchTasksDto[]> {
     const tasks = await this.taskRepository.getAll();
-    return tasks.map((task) => FetchTasksDto.parse(task.props));
+    return tasks.map((task) => FetchTasksDto.parse(task));
   }
 }

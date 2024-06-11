@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { TaskProps } from '../entities/task';
+import type { Task } from '../entities/task';
 
 export const SaveTaskSchema = z.object({
   title: z.string(),
@@ -7,4 +7,4 @@ export const SaveTaskSchema = z.object({
 
 export type SaveTask = z.infer<typeof SaveTaskSchema>;
 
-export type UpdateTask = Partial<Omit<TaskProps, 'id'>>;
+export type UpdateTask = Partial<Omit<Task, 'id'>>;
