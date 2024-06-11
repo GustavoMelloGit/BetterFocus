@@ -1,23 +1,19 @@
-import { z } from 'zod';
 import type { TaskRepository } from '~/domain/repositories/task';
-
-const FetchTasksDto = z.object({
-  id: z.string(),
-  title: z.string(),
-  completed: z.boolean(),
-});
-
-type FetchTasksDto = z.infer<typeof FetchTasksDto>;
+import type { FetchTasksDto } from '../dtos/fetch_tasks';
+import type { Validator } from '../validators/validator';
 
 export interface IFetchTasksUseCase {
   execute(): Promise<FetchTasksDto[]>;
 }
 
 export class FetchTasksUseCase implements IFetchTasksUseCase {
-  constructor(private readonly taskRepository: TaskRepository) {}
+  constructor(
+    private readonly taskRepository: TaskRepository,
+    private readonly validator: Validator<FetchTasksDto>
+  ) {}
 
   public async execute(): Promise<FetchTasksDto[]> {
     const tasks = await this.taskRepository.getAll();
-    return tasks.map((task) => FetchTasksDto.parse(task));
+    return tasks.map((task) => this.validator.validate(task));
   }
 }
