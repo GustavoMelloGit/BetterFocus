@@ -11,11 +11,13 @@ import { makeAddTaskUseCase } from '~/infra/di/make_add_task_use_case';
 import { makeDeleteTaskUseCase } from '~/infra/di/make_delete_task_use_case';
 import { makeFetchTasksUseCase } from '~/infra/di/make_fetch_tasks_use_case';
 import { makeFinishTaskUseCase } from '~/infra/di/make_finish_task_use_case';
+import { makeReopenTaskUseCase } from '~/infra/di/make_reopen_task_use_case';
 
 const fetchTasksUseCase = makeFetchTasksUseCase();
 const addTaskUseCase = makeAddTaskUseCase();
 const deleteTaskUseCase = makeDeleteTaskUseCase();
 const finishTaskUseCase = makeFinishTaskUseCase();
+const reopenTaskUseCase = makeReopenTaskUseCase();
 
 export const useListLoader = routeLoader$(async () => {
   return fetchTasksUseCase.execute();
@@ -75,11 +77,30 @@ export const useFinishTaskAction = routeAction$(
   })
 );
 
+export const useReopenTaskAction = routeAction$(
+  async (item) => {
+    try {
+      await reopenTaskUseCase.execute(item);
+      return {
+        success: true,
+      };
+    } catch {
+      return {
+        success: false,
+      };
+    }
+  },
+  zod$({
+    id: z.string().trim().min(1),
+  })
+);
+
 export default component$(() => {
   const list = useListLoader();
   const addTaskAction = useAddTaskAction();
   const deleteTaskAction = useDeleteTaskAction();
   const finishTaskAction = useFinishTaskAction();
+  const reopenTaskAction = useReopenTaskAction();
 
   return (
     <div class='flex-1 center flex-col'>
@@ -149,6 +170,10 @@ export default component$(() => {
 
                       if (isChecked) {
                         await finishTaskAction.submit({
+                          id: item.id,
+                        });
+                      } else {
+                        await reopenTaskAction.submit({
                           id: item.id,
                         });
                       }
