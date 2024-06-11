@@ -12,6 +12,8 @@ import { makeDeleteTaskUseCase } from '~/infra/di/make_delete_task_use_case';
 import { makeFetchTasksUseCase } from '~/infra/di/make_fetch_tasks_use_case';
 import { makeFinishTaskUseCase } from '~/infra/di/make_finish_task_use_case';
 import { makeReopenTaskUseCase } from '~/infra/di/make_reopen_task_use_case';
+import TrashCan from '~/presentation/components/icons/TrashCan';
+import Checkbox from '~/presentation/components/inputs/Checkbox';
 
 const fetchTasksUseCase = makeFetchTasksUseCase();
 const addTaskUseCase = makeAddTaskUseCase();
@@ -103,11 +105,11 @@ export default component$(() => {
   const reopenTaskAction = useReopenTaskAction();
 
   return (
-    <div class='flex-1 center flex-col'>
-      <div class='w-fit shadow-xl p-4 rounded-lg'>
-        <div class='mb-6 text-center'>
-          <h1>
-            <span>TODO</span> List
+    <div class='flex-1 center flex-col text-white'>
+      <div class='p-4 rounded-lg max-w-[24rem] w-full'>
+        <div class='mb-4'>
+          <h1 class='text-2xl font-bold bg-gradient-to-r from-pink-600 to-indigo-400 inline-block text-transparent bg-clip-text'>
+            Todo app
           </h1>
         </div>
 
@@ -115,18 +117,19 @@ export default component$(() => {
           <Form
             action={addTaskAction}
             spaReset
-            class='flex gap-2 items-stretch'
+            class='flex gap-2 items-stretch bg-gray-400/20 p-2 rounded-md'
           >
             <input
               type='text'
               name='title'
-              class='border-2 flex-1 p-1 rounded-md'
+              class='flex-1 p-1 rounded-md bg-transparent focus:outline-none'
+              placeholder='Task name'
             />
             <button
               type='submit'
-              class='bg-slate-500 rounded-md px-2 py-1 text-white'
+              class='bg-gray-950 rounded-md px-5 py-3 text-white'
             >
-              Add item
+              Add
             </button>
           </Form>
         </div>
@@ -135,36 +138,12 @@ export default component$(() => {
           {list.value.length === 0 ? (
             <span>No items found</span>
           ) : (
-            <ul class='space-y-2'>
+            <ul class='space-y-3'>
               {list.value.map((item) => (
-                <li key={item.id} class='flex items-center gap-3'>
-                  <button
-                    onClick$={async () => {
-                      const { value } = await deleteTaskAction.submit({
-                        id: item.id,
-                      });
-                      if (value.success) {
-                        list.value.filter((i) => i.id !== item.id);
-                      }
-                    }}
-                    class='bg-red-500 p-1 rounded-md text-white'
-                  >
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      width='1em'
-                      height='1em'
-                      viewBox='0 0 24 24'
-                    >
-                      <path
-                        fill='currentColor'
-                        d='M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6zM8 9h8v10H8zm7.5-5l-1-1h-5l-1 1H5v2h14V4z'
-                      />
-                    </svg>
-                  </button>
-                  <input
-                    type='checkbox'
+                <li key={item.id} class='flex items-center gap-3 text-white/90'>
+                  <Checkbox
                     checked={item.completed}
-                    name='complete-task'
+                    name={`check-${item.id}`}
                     onChange$={async (_e, element) => {
                       const isChecked = element.checked;
 
@@ -179,10 +158,20 @@ export default component$(() => {
                       }
                     }}
                   />
-                  <span>
-                    {item.title} -{' '}
-                    {item.completed ? 'Completed' : 'Not completed'}
-                  </span>
+                  <span class='flex-1'>{item.title}</span>
+                  <button
+                    onClick$={async () => {
+                      const { value } = await deleteTaskAction.submit({
+                        id: item.id,
+                      });
+                      if (value.success) {
+                        list.value.filter((i) => i.id !== item.id);
+                      }
+                    }}
+                    class='text-red-500 text-xl'
+                  >
+                    <TrashCan />
+                  </button>
                 </li>
               ))}
             </ul>
