@@ -2,7 +2,7 @@ import { component$, useStore } from "@builder.io/qwik";
 import { routeLoader$, type DocumentHead } from "@builder.io/qwik-city";
 import { makeFetchTasksUseCase } from "~/infra/di/make_fetch_tasks_use_case";
 import TaskForm from "~/presentation/modules/todo_list/components/TaskForm";
-import TaskList from "~/presentation/modules/todo_list/components/TaskList";
+import TaskList from "~/presentation/modules/todo_list/components/TaskList/TaskList";
 
 const fetchTasksUseCase = makeFetchTasksUseCase();
 

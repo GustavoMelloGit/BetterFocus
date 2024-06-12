@@ -65,7 +65,7 @@ export const useReopenTaskAction = globalAction$(
   }),
 );
 
-type Props = {
+export type Props = {
   list: FetchTasksDto;
 };
 export default component$<Props>(({ list }) => {
@@ -74,8 +74,9 @@ export default component$<Props>(({ list }) => {
   const reopenTaskAction = useReopenTaskAction();
 
   if (!list.length) return <span>No items found</span>;
+
   return (
-    <ul class="space-y-3">
+    <ul class="space-y-3" data-testid="task-list">
       {list.map((item, index) => (
         <li key={item.id} class="flex items-center gap-3 text-white/90">
           <Checkbox
