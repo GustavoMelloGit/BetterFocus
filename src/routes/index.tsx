@@ -1,4 +1,4 @@
-import { component$ } from '@builder.io/qwik';
+import { component$, useStore } from "@builder.io/qwik";
 import {
   Form,
   routeAction$,
@@ -6,14 +6,14 @@ import {
   z,
   zod$,
   type DocumentHead,
-} from '@builder.io/qwik-city';
-import { makeAddTaskUseCase } from '~/infra/di/make_add_task_use_case';
-import { makeDeleteTaskUseCase } from '~/infra/di/make_delete_task_use_case';
-import { makeFetchTasksUseCase } from '~/infra/di/make_fetch_tasks_use_case';
-import { makeFinishTaskUseCase } from '~/infra/di/make_finish_task_use_case';
-import { makeReopenTaskUseCase } from '~/infra/di/make_reopen_task_use_case';
-import TrashCan from '~/presentation/components/icons/TrashCan';
-import Checkbox from '~/presentation/components/inputs/Checkbox';
+} from "@builder.io/qwik-city";
+import { makeAddTaskUseCase } from "~/infra/di/make_add_task_use_case";
+import { makeDeleteTaskUseCase } from "~/infra/di/make_delete_task_use_case";
+import { makeFetchTasksUseCase } from "~/infra/di/make_fetch_tasks_use_case";
+import { makeFinishTaskUseCase } from "~/infra/di/make_finish_task_use_case";
+import { makeReopenTaskUseCase } from "~/infra/di/make_reopen_task_use_case";
+import TrashCan from "~/presentation/components/icons/TrashCan";
+import Checkbox from "~/presentation/components/inputs/Checkbox";
 
 const fetchTasksUseCase = makeFetchTasksUseCase();
 const addTaskUseCase = makeAddTaskUseCase();
@@ -40,7 +40,7 @@ export const useAddTaskAction = routeAction$(
   },
   zod$({
     title: z.string().trim().min(1),
-  })
+  }),
 );
 
 export const useDeleteTaskAction = routeAction$(
@@ -58,7 +58,7 @@ export const useDeleteTaskAction = routeAction$(
   },
   zod$({
     id: z.string().trim().min(1),
-  })
+  }),
 );
 
 export const useFinishTaskAction = routeAction$(
@@ -76,7 +76,7 @@ export const useFinishTaskAction = routeAction$(
   },
   zod$({
     id: z.string().trim().min(1),
-  })
+  }),
 );
 
 export const useReopenTaskAction = routeAction$(
@@ -94,40 +94,41 @@ export const useReopenTaskAction = routeAction$(
   },
   zod$({
     id: z.string().trim().min(1),
-  })
+  }),
 );
 
 export default component$(() => {
-  const list = useListLoader();
+  const loadedList = useListLoader();
+  const list = useStore(loadedList.value);
   const addTaskAction = useAddTaskAction();
   const deleteTaskAction = useDeleteTaskAction();
   const finishTaskAction = useFinishTaskAction();
   const reopenTaskAction = useReopenTaskAction();
 
   return (
-    <div class='flex-1 center flex-col text-white'>
-      <div class='p-4 rounded-lg max-w-[24rem] w-full'>
-        <div class='mb-4'>
-          <h1 class='text-2xl font-bold bg-gradient-to-r from-pink-600 to-indigo-400 inline-block text-transparent bg-clip-text'>
+    <div class="center flex-1 flex-col text-white">
+      <div class="w-full max-w-96 rounded-lg p-4">
+        <div class="mb-4">
+          <h1 class="inline-block bg-gradient-to-r from-pink-600 to-indigo-400 bg-clip-text text-2xl font-bold text-transparent">
             Todo app
           </h1>
         </div>
 
-        <div class='mb-4'>
+        <div class="mb-4">
           <Form
             action={addTaskAction}
             spaReset
-            class='flex gap-2 items-stretch bg-gray-400/20 p-2 rounded-md'
+            class="flex items-stretch gap-2 rounded-md bg-gray-400/20 p-2"
           >
             <input
-              type='text'
-              name='title'
-              class='flex-1 p-1 rounded-md bg-transparent focus:outline-none'
-              placeholder='Task name'
+              type="text"
+              name="title"
+              class="flex-1 rounded-md bg-transparent p-1 focus:outline-none"
+              placeholder="Task name"
             />
             <button
-              type='submit'
-              class='bg-gray-950 rounded-md px-5 py-3 text-white'
+              type="submit"
+              class="rounded-md bg-gray-950 px-5 py-3 text-white"
             >
               Add
             </button>
@@ -135,18 +136,21 @@ export default component$(() => {
         </div>
 
         <section>
-          {list.value.length === 0 ? (
+          {list.length === 0 ? (
             <span>No items found</span>
           ) : (
-            <ul class='space-y-3'>
-              {list.value.map((item) => (
-                <li key={item.id} class='flex items-center gap-3 text-white/90'>
+            <ul class="space-y-3">
+              {list.map((item, index) => (
+                <li key={item.id} class="flex items-center gap-3 text-white/90">
                   <Checkbox
                     checked={item.completed}
                     name={`check-${item.id}`}
                     onChange$={async (_e, element) => {
                       const isChecked = element.checked;
+                      const currentItem = list.find((i) => i.id === item.id);
+                      if (!currentItem) return;
 
+                      currentItem.completed = isChecked;
                       if (isChecked) {
                         await finishTaskAction.submit({
                           id: item.id,
@@ -158,17 +162,15 @@ export default component$(() => {
                       }
                     }}
                   />
-                  <span class='flex-1'>{item.title}</span>
+                  <span class="flex-1">{item.title}</span>
                   <button
                     onClick$={async () => {
-                      const { value } = await deleteTaskAction.submit({
+                      list.splice(index, 1);
+                      await deleteTaskAction.submit({
                         id: item.id,
                       });
-                      if (value.success) {
-                        list.value.filter((i) => i.id !== item.id);
-                      }
                     }}
-                    class='text-red-500 text-xl'
+                    class="text-xl text-red-500"
                   >
                     <TrashCan />
                   </button>
@@ -183,11 +185,11 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: 'BetterFocus',
+  title: "BetterFocus",
   meta: [
     {
-      name: 'description',
-      content: 'Qwik site description',
+      name: "description",
+      content: "Qwik site description",
     },
   ],
 };
