@@ -1,10 +1,10 @@
-import type { Task } from '../entities/task';
-import type { SaveTask, UpdateTask } from './task.types';
+import type { Task } from "../entities/task";
 
 export interface TaskRepository {
+  nextIdentity(): string;
   getAll(): Promise<Task[]>;
-  getById(id: string): Promise<Task | null>;
-  save(task: SaveTask): Promise<void>;
+  taskOfId(id: string): Promise<Task>;
+  save(task: Task): Promise<void>;
   delete(id: string): Promise<void>;
-  update(id: string, task: UpdateTask): Promise<void>;
+  update(id: string, task: Task): Promise<void>;
 }

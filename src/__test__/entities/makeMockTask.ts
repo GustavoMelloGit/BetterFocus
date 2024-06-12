@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker";
-import type { Task } from "~/domain/entities/task";
+import type { TaskProps } from "~/domain/entities/task";
 
-export function makeMockTask(props?: Partial<Task>): Task {
+export function makeMockTask(props?: Partial<TaskProps>): TaskProps {
   return {
     id: faker.string.uuid(),
     title: faker.lorem.sentence(5),
