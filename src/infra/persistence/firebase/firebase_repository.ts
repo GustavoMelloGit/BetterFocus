@@ -6,8 +6,8 @@ import {
   getDocs,
   setDoc,
   updateDoc,
-} from 'firebase/firestore';
-import { db } from './init';
+} from "firebase/firestore";
+import { db } from "./init";
 
 type ObjectLike = Record<string, unknown>;
 
@@ -24,14 +24,14 @@ export class FirebaseRepository {
   }
 
   async createDoc<T extends ObjectLike>(id: string, data: T): Promise<void> {
-    const taskRef = this.getRef(id);
-    await setDoc(taskRef, data);
+    const ref = this.getRef(id);
+    await setDoc(ref, data);
   }
 
   async findAllDocs<T extends ObjectLike>(): Promise<T[]> {
-    const tasksCol = collection(this.database, this.collectionName);
-    const taskSnapshot = await getDocs(tasksCol);
-    const dataList = taskSnapshot.docs.map((doc) => doc.data());
+    const col = collection(this.database, this.collectionName);
+    const snapshot = await getDocs(col);
+    const dataList = snapshot.docs.map((doc) => doc.data());
     return dataList as T[];
   }
 
@@ -39,7 +39,7 @@ export class FirebaseRepository {
     const docRef = this.getRef(id);
     const docSnap = await getDoc(docRef);
 
-    if (!docSnap.exists()) throw new Error('Document not found');
+    if (!docSnap.exists()) throw new Error("Document not found");
 
     const data = docSnap.data();
     return data as T;
