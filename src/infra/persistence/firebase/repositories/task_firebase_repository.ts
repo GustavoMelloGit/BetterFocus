@@ -1,4 +1,4 @@
-import { randomBytes } from "crypto";
+import { v4 } from "uuid";
 import { Task, type TaskProps } from "~/domain/entities/task";
 import type { TaskRepository } from "~/domain/repositories/task";
 import { FirebaseRepository } from "../firebase_repository";
@@ -10,8 +10,9 @@ export class TaskFirebaseRepository
   constructor() {
     super("tasks");
   }
+
   nextIdentity(): string {
-    return randomBytes(16).toString("hex");
+    return v4();
   }
 
   async getAll(): Promise<Task[]> {
