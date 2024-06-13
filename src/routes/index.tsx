@@ -24,7 +24,7 @@ export default component$(() => {
         </div>
 
         <div class="mb-4">
-          <TaskForm />
+          <TaskForm currentList={list} />
         </div>
 
         <section>

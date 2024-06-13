@@ -4,7 +4,7 @@ import type { AddTaskDto } from "../dtos/add_task";
 import type { Validator } from "../validators/validator";
 
 export interface IAddTaskUseCase {
-  execute(dto: AddTaskDto): Promise<void>;
+  execute(dto: AddTaskDto): Promise<AddTaskDto>;
 }
 
 export class AddTaskUseCase implements IAddTaskUseCase {
@@ -13,7 +13,7 @@ export class AddTaskUseCase implements IAddTaskUseCase {
     private readonly validator: Validator<AddTaskDto>,
   ) {}
 
-  public async execute(dto: AddTaskDto): Promise<void> {
+  public async execute(dto: AddTaskDto): Promise<AddTaskDto> {
     const safeDto = this.validator.validate(dto);
     const task = new Task({
       completed: false,
@@ -21,5 +21,7 @@ export class AddTaskUseCase implements IAddTaskUseCase {
       title: safeDto.title,
     });
     await this.taskRepository.save(task);
+
+    return task.props;
   }
 }

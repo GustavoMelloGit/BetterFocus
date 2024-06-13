@@ -1,5 +1,6 @@
-import { component$ } from "@builder.io/qwik";
+import { $, component$ } from "@builder.io/qwik";
 import { Form, globalAction$, z, zod$ } from "@builder.io/qwik-city";
+import type { FetchTasksDto } from "~/application/dtos/fetch_tasks";
 import { makeAddTaskUseCase } from "~/infra/di/make_add_task_use_case";
 
 const addTaskUseCase = makeAddTaskUseCase();
@@ -7,9 +8,10 @@ const addTaskUseCase = makeAddTaskUseCase();
 export const useAddTaskAction = globalAction$(
   async (item) => {
     try {
-      await addTaskUseCase.execute(item);
+      const task = await addTaskUseCase.execute(item);
       return {
         success: true,
+        task,
       };
     } catch {
       return {
@@ -22,12 +24,20 @@ export const useAddTaskAction = globalAction$(
   }),
 );
 
-export default component$(() => {
+type Props = {
+  currentList: FetchTasksDto;
+};
+export default component$<Props>(({ currentList }) => {
   const addTaskAction = useAddTaskAction();
 
   return (
     <Form
       action={addTaskAction}
+      onSubmitCompleted$={$(() => {
+        if (!addTaskAction.value?.success) return;
+        const taskCreated = addTaskAction.value.task as FetchTasksDto[number];
+        currentList.push(taskCreated);
+      })}
       spaReset
       class="flex items-stretch gap-2 rounded-md bg-gray-400/20 p-2"
     >
