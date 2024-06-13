@@ -6,6 +6,7 @@ export function makeMockTask(props?: Partial<TaskProps>): TaskProps {
     id: faker.string.uuid(),
     title: faker.lorem.sentence(5),
     completed: faker.datatype.boolean(),
+    completedAt: faker.date.recent().getTime(),
     ...props,
   };
 }
