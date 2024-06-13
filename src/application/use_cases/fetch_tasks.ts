@@ -14,6 +14,12 @@ export class FetchTasksUseCase implements IFetchTasksUseCase {
 
   public async execute(): Promise<FetchTasksDto> {
     const tasks = await this.taskRepository.getAll();
-    return this.validator.validate(tasks);
+    const dto: FetchTasksDto = tasks.map((t) => ({
+      id: t.id,
+      title: t.title,
+      completed: t.completed,
+      completedAt: t.completedAt,
+    }));
+    return this.validator.validate(dto);
   }
 }

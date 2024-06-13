@@ -19,6 +19,7 @@ export class AddTaskUseCase implements IAddTaskUseCase {
       completed: false,
       id: this.taskRepository.nextIdentity(),
       title: safeDto.title,
+      completedAt: null,
     });
     await this.taskRepository.save(task);
 

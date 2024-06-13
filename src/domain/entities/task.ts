@@ -5,6 +5,7 @@ const TaskPropsSchema = z.object({
   id: z.string(),
   title: z.string(),
   completed: z.boolean(),
+  completedAt: z.number().nullable(),
 });
 
 export type TaskProps = z.infer<typeof TaskPropsSchema>;
@@ -17,10 +18,12 @@ export class Task extends Entity<TaskProps> {
 
   public finish(): void {
     this.completed = true;
+    this.completedAt = new Date().getTime();
   }
 
   public reopen(): void {
     this.completed = false;
+    this.completedAt = null;
   }
 
   get id(): string {
@@ -29,6 +32,14 @@ export class Task extends Entity<TaskProps> {
 
   get title(): string {
     return super.props.title;
+  }
+
+  private set completedAt(value: number | null) {
+    super.props.completedAt = value;
+  }
+
+  get completedAt(): number | null {
+    return super.props.completedAt;
   }
 
   private set completed(value: boolean) {
@@ -44,6 +55,7 @@ export class Task extends Entity<TaskProps> {
       id: this.id,
       title: this.title,
       completed: this.completed,
+      completedAt: this.completedAt,
     };
   }
 }
