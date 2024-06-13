@@ -13,12 +13,20 @@ export default component$(() => {
   return <TodoPage />;
 });
 
-export const head: DocumentHead = {
-  title: "BetterFocus",
-  meta: [
-    {
-      name: "description",
-      content: "Qwik site description",
-    },
-  ],
+export const head: DocumentHead = ({ resolveValue }) => {
+  const tasks = resolveValue(useListLoader);
+  const tasksToComplete = tasks.filter((task) => !task.completed).length;
+  let defaultTitle = "BetterFocus";
+  if (tasksToComplete > 0) {
+    defaultTitle += ` - ${tasksToComplete} Tasks`;
+  }
+  return {
+    title: defaultTitle,
+    meta: [
+      {
+        name: "description",
+        content: `BetterFocus - ${tasksToComplete} Tasks`,
+      },
+    ],
+  };
 };
