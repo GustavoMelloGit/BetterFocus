@@ -2,15 +2,13 @@ import { component$ } from "@builder.io/qwik";
 import { globalAction$, z, zod$ } from "@builder.io/qwik-city";
 import { format } from "date-fns";
 import type { FetchTasksDto } from "~/application/dtos/fetch_tasks";
-import { makeDeleteTaskUseCase } from "~/infra/di/make_delete_task_use_case";
-import { makeFinishTaskUseCase } from "~/infra/di/make_finish_task_use_case";
-import { makeReopenTaskUseCase } from "~/infra/di/make_reopen_task_use_case";
+import {
+  deleteTaskUseCase,
+  finishTaskUseCase,
+  reopenTaskUseCase,
+} from "~/infra/di/use_cases/TaskUseCaseFactory";
 import TrashCan from "~/presentation/components/icons/TrashCan";
 import Checkbox from "~/presentation/components/inputs/Checkbox";
-
-const deleteTaskUseCase = makeDeleteTaskUseCase();
-const finishTaskUseCase = makeFinishTaskUseCase();
-const reopenTaskUseCase = makeReopenTaskUseCase();
 
 export const useDeleteTaskAction = globalAction$(
   async (item) => {
