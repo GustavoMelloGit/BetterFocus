@@ -1,10 +1,10 @@
 import type { TaskRepository } from "~/domain/repositories/task";
 import type { DeleteTaskDto } from "../dtos/delete_task";
 import type { Validator } from "../validators/validator";
+import type { UseCase } from "./use_case";
 
-export interface IDeleteTaskUseCase {
-  execute(dto: DeleteTaskDto): Promise<void>;
-}
+export interface IDeleteTaskUseCase
+  extends UseCase<DeleteTaskDto, Promise<void>> {}
 
 export class DeleteTaskUseCase implements IDeleteTaskUseCase {
   constructor(

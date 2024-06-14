@@ -1,10 +1,10 @@
 import type { TaskRepository } from "~/domain/repositories/task";
 import type { FetchTasksDto } from "../dtos/fetch_tasks";
 import type { Validator } from "../validators/validator";
+import type { UseCase } from "./use_case";
 
-export interface IFetchTasksUseCase {
-  execute(): Promise<FetchTasksDto>;
-}
+export interface IFetchTasksUseCase
+  extends UseCase<void, Promise<FetchTasksDto>> {}
 
 export class FetchTasksUseCase implements IFetchTasksUseCase {
   constructor(

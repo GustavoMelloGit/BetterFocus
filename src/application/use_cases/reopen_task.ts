@@ -1,10 +1,10 @@
 import type { TaskRepository } from "~/domain/repositories/task";
 import type { ReopenTaskDto } from "../dtos/reopen_task";
 import type { Validator } from "../validators/validator";
+import type { UseCase } from "./use_case";
 
-export interface IReopenTaskUseCase {
-  execute(dto: ReopenTaskDto): Promise<void>;
-}
+export interface IReopenTaskUseCase
+  extends UseCase<ReopenTaskDto, Promise<void>> {}
 
 export class ReopenTaskUseCase implements IReopenTaskUseCase {
   constructor(
