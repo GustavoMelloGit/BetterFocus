@@ -73,18 +73,24 @@ export default component$<Props>(({ list }) => {
   const finishTaskAction = useFinishTaskAction();
   const reopenTaskAction = useReopenTaskAction();
 
-  if (!list.length) return <span>No items found</span>;
+  if (!list.length)
+    return <span data-testid="no-items-found">No items found</span>;
 
   return (
     <ul class="space-y-3" data-testid="task-list">
       {list.map((item, index) => {
         const checkId = `check-${item.id}`;
         return (
-          <li key={item.id} class="flex items-center gap-3 text-white/85">
+          <li
+            key={item.id}
+            class="flex items-center gap-3 text-white/85"
+            data-testid="task-item"
+          >
             <Checkbox
               checked={item.completed}
               id={checkId}
               name={checkId}
+              data-testid={item.completed ? "reopen-task" : "finish-task"}
               onChange$={async (_e, element) => {
                 const isChecked = element.checked;
                 const currentItem = list.find((i) => i.id === item.id);
@@ -108,7 +114,9 @@ export default component$<Props>(({ list }) => {
             <span class="flex-1">{item.title}</span>
             <div class="flex items-center gap-1">
               {item.completedAt && (
-                <span>{format(item.completedAt, "hh:mm b")}</span>
+                <span data-testid="completed-at">
+                  {format(item.completedAt, "hh:mm b")}
+                </span>
               )}
               <button
                 onClick$={async () => {
@@ -118,6 +126,7 @@ export default component$<Props>(({ list }) => {
                   });
                 }}
                 class="text-xl text-red-500"
+                data-testid="delete-task"
               >
                 <TrashCan />
               </button>
