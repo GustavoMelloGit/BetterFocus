@@ -22,7 +22,7 @@ export const useAddTaskAction = globalAction$(
   }),
 );
 
-type Props = {
+export type Props = {
   currentList: FetchTasksDto;
 };
 export default component$<Props>(({ currentList }) => {
@@ -38,14 +38,20 @@ export default component$<Props>(({ currentList }) => {
       })}
       spaReset
       class="flex items-stretch gap-2 rounded-md bg-gray-400/20 p-2"
+      data-testid="task-form"
     >
       <input
         type="text"
         name="title"
         class="flex-1 rounded-md bg-transparent p-1 focus:outline-none"
         placeholder="Task name"
+        data-testid="task-name-input"
       />
-      <button type="submit" class="rounded-md bg-gray-950 px-5 py-3 text-white">
+      <button
+        type="submit"
+        class="rounded-md bg-gray-950 px-5 py-3 text-white"
+        data-testid="add-task-button"
+      >
         Add
       </button>
     </Form>

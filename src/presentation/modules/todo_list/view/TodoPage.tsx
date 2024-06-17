@@ -1,6 +1,6 @@
 import { component$, useStore } from "@builder.io/qwik";
 import { useListLoader } from "~/routes";
-import TaskForm from "../components/TaskForm";
+import TaskForm from "../components/TaskForm/TaskForm";
 import TaskList from "../components/TaskList/TaskList";
 
 export default component$(() => {
