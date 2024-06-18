@@ -93,18 +93,16 @@ export default component$<Props>(({ list }) => {
               data-testid={item.completed ? "reopen-task" : "finish-task"}
               onChange$={async (_e, element) => {
                 const isChecked = element.checked;
-                const currentItem = list.find((i) => i.id === item.id);
-                if (!currentItem) return;
-
-                currentItem.completed = isChecked;
+                item.completed = isChecked;
+                console.log(isChecked);
 
                 if (isChecked) {
-                  currentItem.completedAt = new Date().getTime();
+                  item.completedAt = new Date().getTime();
                   await finishTaskAction.submit({
                     id: item.id,
                   });
                 } else {
-                  currentItem.completedAt = null;
+                  item.completedAt = null;
                   await reopenTaskAction.submit({
                     id: item.id,
                   });
