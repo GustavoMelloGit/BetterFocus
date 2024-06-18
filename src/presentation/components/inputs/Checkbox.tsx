@@ -20,7 +20,7 @@ export default component$<Props>(({ class: className, ...props }) => {
         class={cn([
           "center cursor-pointer rounded-full p-0.5",
           "border-[thin] dark:border-[#3B9464] dark:hover:border-green-500",
-          "dark:text-gray-950",
+          "dark:text-transparent peer-checked:dark:text-gray-950",
           "peer-checked:dark:bg-[#3B9464] peer-checked:dark:hover:bg-green-500",
           className,
         ])}
