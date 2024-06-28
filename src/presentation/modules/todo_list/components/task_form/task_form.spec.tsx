@@ -2,7 +2,7 @@ import { QwikCityMockProvider } from "@builder.io/qwik-city";
 import { createDOM } from "@builder.io/qwik/testing";
 import { describe, expect, it } from "vitest";
 import { makeMockTask } from "~/__test__/entities/makeMockTask";
-import TaskForm, { Props } from "./TaskForm";
+import { Props, TaskForm } from ".";
 
 const renderComponent = async (props: Props) => {
   const { screen, render, userEvent } = await createDOM();

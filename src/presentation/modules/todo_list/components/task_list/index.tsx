@@ -6,9 +6,9 @@ import {
   deleteTaskUseCase,
   finishTaskUseCase,
   reopenTaskUseCase,
-} from "~/infra/di/use_cases/TaskUseCaseFactory";
-import TrashCan from "~/presentation/components/icons/TrashCan";
-import Checkbox from "~/presentation/components/inputs/Checkbox";
+} from "~/infra/di/use_cases/task_use_case_factory";
+import { TrashCan } from "~/presentation/components/icons/trash_can";
+import { Checkbox } from "~/presentation/components/inputs/checkbox";
 
 export const useDeleteTaskAction = globalAction$(
   async (item) => {
@@ -68,7 +68,7 @@ export const useReopenTaskAction = globalAction$(
 export type Props = {
   list: FetchTasksDto;
 };
-export default component$<Props>(({ list }) => {
+export const TaskList = component$<Props>(({ list }) => {
   const deleteTaskAction = useDeleteTaskAction();
   const finishTaskAction = useFinishTaskAction();
   const reopenTaskAction = useReopenTaskAction();

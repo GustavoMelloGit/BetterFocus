@@ -2,7 +2,7 @@ import { QwikCityMockProvider } from "@builder.io/qwik-city";
 import { createDOM } from "@builder.io/qwik/testing";
 import { describe, expect, it, vi } from "vitest";
 import { makeMockTask } from "~/__test__/entities/makeMockTask";
-import TaskList, { Props } from "./TaskList";
+import { Props, TaskList } from ".";
 
 const renderComponent = async (props: Props) => {
   const { screen, render, userEvent } = await createDOM();
@@ -76,7 +76,7 @@ describe("TaskList Component", () => {
 
   it.skip("should mark task as completed on click finish task", async () => {
     vi.mock("./TaskList.tsx", async (getActual) => {
-      const actual = await getActual<typeof import("./TaskList")>();
+      const actual = await getActual<typeof import(".")>();
       return {
         ...actual,
         useFinishTaskAction: () => {

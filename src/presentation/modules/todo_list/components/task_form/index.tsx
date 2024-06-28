@@ -1,7 +1,7 @@
 import { $, component$ } from "@builder.io/qwik";
 import { Form, globalAction$, z, zod$ } from "@builder.io/qwik-city";
 import type { FetchTasksDto } from "~/application/dtos/fetch_tasks";
-import { addTaskUseCase } from "~/infra/di/use_cases/TaskUseCaseFactory";
+import { addTaskUseCase } from "~/infra/di/use_cases/task_use_case_factory";
 
 export const useAddTaskAction = globalAction$(
   async (item) => {
@@ -25,7 +25,7 @@ export const useAddTaskAction = globalAction$(
 export type Props = {
   currentList: FetchTasksDto;
 };
-export default component$<Props>(({ currentList }) => {
+export const TaskForm = component$<Props>(({ currentList }) => {
   const addTaskAction = useAddTaskAction();
 
   return (

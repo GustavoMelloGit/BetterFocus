@@ -5,7 +5,7 @@ import {
   ServiceWorkerRegister,
 } from "@builder.io/qwik-city";
 import { z } from "zod";
-import { RouterHead } from "./presentation/components/router-head/router-head";
+import { RouterHead } from "./presentation/components/router_head";
 
 import "./global.css";
 
