@@ -3,7 +3,7 @@ import { useListLoader } from "~/routes";
 import { TaskForm } from "../components/task_form";
 import { TaskList } from "../components/task_list";
 
-export default component$(() => {
+export const TodoPage = component$(() => {
   const loadedList = useListLoader();
   const list = useStore(loadedList.value);
 

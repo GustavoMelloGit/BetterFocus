@@ -1,7 +1,7 @@
 import { component$ } from "@builder.io/qwik";
 import { routeLoader$, type DocumentHead } from "@builder.io/qwik-city";
 import { fetchTasksUseCase } from "~/infra/di/use_cases/task_use_case_factory";
-import TodoPage from "~/presentation/modules/todo_list/view/TodoPage";
+import { TodoPage } from "~/presentation/modules/todo_list/view/todo_page";
 
 export const useListLoader = routeLoader$(async () => {
   return fetchTasksUseCase.execute();
