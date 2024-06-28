@@ -2,6 +2,7 @@ import { $, component$ } from "@builder.io/qwik";
 import { Form, globalAction$, z, zod$ } from "@builder.io/qwik-city";
 import type { FetchTasksDto } from "~/application/dtos/fetch_tasks";
 import { addTaskUseCase } from "~/infra/di/use_cases/task_use_case_factory";
+import { Button } from "~/presentation/components/buttons/button";
 
 export const useAddTaskAction = globalAction$(
   async (item) => {
@@ -47,13 +48,13 @@ export const TaskForm = component$<Props>(({ currentList }) => {
         placeholder="Task name"
         data-testid="task-name-input"
       />
-      <button
+      <Button
         type="submit"
-        class="rounded-md bg-gray-950 px-5 py-3 text-white"
         data-testid="add-task-button"
+        isLoading={addTaskAction.isRunning}
       >
         Add
-      </button>
+      </Button>
     </Form>
   );
 });
