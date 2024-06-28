@@ -6,7 +6,7 @@ type Props = Omit<QwikIntrinsicElements["input"], "class"> & {
   class?: string;
 };
 
-export default component$<Props>(({ class: className, ...props }) => {
+export const Checkbox = component$<Props>(({ class: className, ...props }) => {
   return (
     <Fragment>
       <input
