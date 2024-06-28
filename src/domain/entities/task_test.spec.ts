@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { ValidationError } from "../errors/ValidationError";
+import { ValidationError } from "../errors/validation_error";
 import { Task, TaskProps } from "./task";
 
 describe("Task Entity", () => {
