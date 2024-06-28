@@ -15,7 +15,7 @@ export class FinishTaskUseCase implements IFinishTaskUseCase {
   public async execute(dto: FinishTaskDto): Promise<void> {
     const safeDto = this.validator.validate(dto);
     const task = await this.taskRepository.taskOfId(safeDto.id);
-    task.finish();
+    task.complete();
     await this.taskRepository.update(safeDto.id, task);
   }
 }

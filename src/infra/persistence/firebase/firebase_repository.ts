@@ -7,6 +7,7 @@ import {
   setDoc,
   updateDoc,
 } from "firebase/firestore";
+import { NotFoundError } from "~/domain/errors/NotFoundError";
 import { db } from "./init";
 
 type ObjectLike = Record<string, unknown>;
@@ -39,7 +40,7 @@ export class FirebaseRepository {
     const docRef = this.getRef(id);
     const docSnap = await getDoc(docRef);
 
-    if (!docSnap.exists()) throw new Error("Document not found");
+    if (!docSnap.exists()) throw new NotFoundError("Document not found");
 
     const data = docSnap.data();
     return data as T;

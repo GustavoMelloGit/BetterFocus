@@ -16,7 +16,7 @@ const renderComponent = async (props: Props) => {
 
 describe("TaskList Component", () => {
   it("should render task form", async () => {
-    const mockTasks = Array.from({ length: 5 }, () => makeMockTask());
+    const mockTasks = Array.from({ length: 5 }, () => makeMockTask().props);
     const { screen } = await renderComponent({ currentList: mockTasks });
     const taskList = screen.querySelector('[data-testid="task-form"]');
     expect(taskList).toBeTruthy();

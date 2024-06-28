@@ -1,6 +1,8 @@
+import { DomainError } from "./DomainError";
+
 type Reason = { field: string; message: string };
 
-export class ValidationError extends Error {
+export class ValidationError extends DomainError {
   private _reason: Reason[] = [];
   layer: string = "domain";
 
