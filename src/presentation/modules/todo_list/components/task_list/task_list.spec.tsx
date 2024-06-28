@@ -1,7 +1,7 @@
 import { QwikCityMockProvider } from "@builder.io/qwik-city";
 import { createDOM } from "@builder.io/qwik/testing";
 import { describe, expect, it, vi } from "vitest";
-import { makeMockTask } from "~/__test__/entities/makeMockTask";
+import { makeMockTask } from "~/__test__/entities/make_mock_task";
 import { Props, TaskList } from ".";
 
 const renderComponent = async (props: Props) => {
