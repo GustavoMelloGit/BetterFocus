@@ -27,8 +27,9 @@
     "preview": "qwik build preview && vite preview --open",
     "serve": "node server/entry.express",
     "start": "node server/entry.express",
-    "test.unit": "vitest components",
-    "test.unit.ui": "vitest --ui components",
+    "test": "vitest components",
+    "test:no-watch": "vitest components --watch=false",
+    "test.ui": "vitest --ui components",
     "qwik": "qwik"
   },
   "devDependencies": {
