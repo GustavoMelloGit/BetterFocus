@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { ValidationError } from "../errors/ValidationError";
+import { ValidationError } from "../errors/validation_error";
 
 const TaskPropsSchema = z.object({
   id: z.string(),

@@ -1,4 +1,4 @@
-import { DomainError } from "./DomainError";
+import { DomainError } from "./domain_error";
 
 type Reason = { field: string; message: string };
 

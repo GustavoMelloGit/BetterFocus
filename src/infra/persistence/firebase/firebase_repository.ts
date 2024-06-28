@@ -7,7 +7,7 @@ import {
   setDoc,
   updateDoc,
 } from "firebase/firestore";
-import { NotFoundError } from "~/domain/errors/NotFoundError";
+import { NotFoundError } from "~/domain/errors/not_found_error";
 import { db } from "./init";
 
 type ObjectLike = Record<string, unknown>;
